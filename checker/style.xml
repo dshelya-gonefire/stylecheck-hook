@@ -116,7 +116,7 @@
 		<!-- Metrics.                   -->
 		<module name="NPathComplexity"/>
 		<module name="CyclomaticComplexity">
-			<property name="max" value="15"/>
+			<property name="max" value="9"/>
 		</module>
 		<!-- Determines complexity of methods, classes and files by counting the Non Commenting Source Statements (NCSS)-->
 		<module name="JavaNCSS">
