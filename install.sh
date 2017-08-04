@@ -5,6 +5,11 @@ if [[ -z "$1" ]]; then
 	exit
 fi
 
+if [[ ! -d "checker" ]]; then
+    echo "Please run the install.sh directly from its folder"
+	exit
+fi
+
 ENGINE_DIR=~/stylecheck
 GIT_HOOKS_DIR=$1/.git/hooks
 
@@ -21,6 +26,7 @@ git config --global --unset-all check.engine
 git config --global --unset-all check.style
 git config --global --add check.engine $ENGINE_DIR/checkstyle.jar
 git config --global --add check.style $ENGINE_DIR/style.xml
-
+git config --global alias.verify '!sh .git/hooks/pre-commit'
+ 
 cp hook/* $GIT_HOOKS_DIR
 

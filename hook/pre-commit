@@ -2,7 +2,7 @@
 
 ### Color highlights
 RED='\033[1;31m'
-GREEN='\032[0;32m'
+GREEN='\033[1;32m'
 NO_COLOR='\033[0m'
 
 CHECKER=`git config --get check.engine`;
@@ -28,11 +28,11 @@ while read CHANGE ; do
 done)
  
 ### Verify that there are no errors discovered otherwise print errors and exit with error code
-if [[ -z "$ERRORS" ]]; then
-    echo -e "${GREEN}Pre-merge check passed succesfully. Code looks good${NO_COLOR}" 
+if [[ "$ERRORS" == "" || "$ERRORS" == "~" ]]; then
+    echo -e "${GREEN}Style verification check passed succesfully${NO_COLOR}" 
 	exit 0
 else
-    echo -en "${RED}Pre-merge check failed. Commit aborted${NO_COLOR}"
+    echo -en "${RED}Style verification check failed. Commit aborted${NO_COLOR}"
 	echo $ERRORS | tr '~' '\n' | sed "s/^.ERROR. \(.*java\):/\n\1\n/" | GREP_COLOR='1;33' egrep --color '\s\[.*\]|$'
 	exit -1;
 fi  
