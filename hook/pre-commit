@@ -1,0 +1,38 @@
+#!/bin/bash
+
+### Color highlights
+RED='\033[1;31m'
+GREEN='\032[0;32m'
+NO_COLOR='\033[0m'
+
+CHECKER=`git config --get check.engine`;
+CONFIG_FILE=`git config --get check.style`;
+
+### Retrieve list of all changed and staged JAVA files from index ###
+
+ERRORS=$(git diff-index --cached HEAD | grep .java | sed 's/^:.*\t//' | uniq |\
+
+### Iterate through discovered changes and identify affected lines
+while read CHANGE ; do 
+
+  ###Extract affected lines
+  AFFECTED_LINES=`git blame $CHANGE | grep "Not Committed Yet" | sed "s/^.* \+\([0-9]\+\)).*$/\1/" | paste -s -d\| -`;
+  
+  ###Construct regexp to filter checktyle errors only for affected lines
+  CHANGE_REGEXP=$(echo ".java:($AFFECTED_LINES)"):;
+  
+  ###Validate changes against style policies and filter out only affected lines
+  LINES=`java -jar $CHECKER -c $CONFIG_FILE $CHANGE | egrep $CHANGE_REGEXP | paste -s -d'~' -`
+  
+  echo ~$LINES
+done)
+ 
+### Verify that there are no errors discovered otherwise print errors and exit with error code
+if [[ -z "$ERRORS" ]]; then
+    echo -e "${GREEN}Pre-merge check passed succesfully. Code looks good${NO_COLOR}" 
+	exit 0
+else
+    echo -en "${RED}Pre-merge check failed. Commit aborted${NO_COLOR}"
+	echo $ERRORS | tr '~' '\n' | sed "s/^.ERROR. \(.*java\):/\n\1\n/" | GREP_COLOR='1;33' egrep --color '\s\[.*\]|$'
+	exit -1;
+fi  
