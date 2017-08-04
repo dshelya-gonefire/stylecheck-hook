@@ -34,6 +34,14 @@
 			<property name="processJavadoc" value="false"/>
 		</module>
 
+		<!-- Annotations -->
+		<module name="MissingOverride">
+			<property name="javaFiveCompatibility" value="true"/>
+		</module>
+		<module name="SuppressWarnings">
+			<property name="format" value="^unchecked$|^unused$"/>			
+		</module>
+
 		<!-- Checks for Size Violations.                    -->
 		<module name="LineLength">
 			<property name="max" value="150"/>
@@ -123,6 +131,73 @@
 		<module name="UpperEll"/>
 		<module name="UncommentedMain"/>
 		<module name="AvoidEscapedUnicodeCharacters"/>
+
+		<!--The condition in for performs no check-->
+		<module name="DescendantToken">
+			<property name="tokens" value="FOR_CONDITION"/>
+			<property name="limitedTokens" value="EXPR"/>
+			<property name="minimumNumber" value="1"/>
+			<property name="maximumMessage" value="The condition in for performs no check"/>			
+		</module>
+
+		<!--Comparing this with null (i.e. this == null and this != null)-->
+		<module name="DescendantToken">
+			<property name="tokens" value="EQUAL,NOT_EQUAL"/>
+			<property name="limitedTokens" value="LITERAL_THIS,LITERAL_NULL"/>
+			<property name="maximumNumber" value="1"/>
+			<property name="maximumDepth" value="1"/>
+			<property name="sumTokenCounts" value="true"/>
+			<property name="maximumMessage" value="Comparing THIS with null is discouraged"/>
+		</module>
+
+		<!--The initialiser in for performs no setup (where a while statement could be used instead)-->
+		<module name="DescendantToken">
+			<property name="tokens" value="FOR_INIT"/>
+			<property name="limitedTokens" value="EXPR"/>
+			<property name="minimumNumber" value="1"/>
+			<property name="maximumMessage" value="The initialiser in FOR performs no setup. Use WHILE statement instead"/>			
+		</module>
+
+		<!--A switch within a switch-->
+		<module name="DescendantToken">
+			<property name="tokens" value="LITERAL_SWITCH"/>
+			<property name="limitedTokens" value="LITERAL_SWITCH"/>
+			<property name="maximumNumber" value="0"/>
+			<property name="minimumDepth" value="1"/>
+			<property name="maximumMessage" value="A switch within a switch is prohibited"/>
+		</module>
+
+		<!--A return statement from within a catch or finally block-->
+		<module name="DescendantToken">
+			<property name="tokens" value="LITERAL_FINALLY,LITERAL_CATCH"/>
+			<property name="limitedTokens" value="LITERAL_RETURN"/>
+			<property name="maximumNumber" value="0"/>
+			<property name="maximumMessage" value="A return statement from within a catch or finally block is not allowed"/>
+		</module>
+
+		<!--A return with null statement -->
+		<module name="DescendantToken">
+			<property name="tokens" value="LITERAL_RETURN"/>
+			<property name="limitedTokens" value="LITERAL_NULL"/>
+			<property name="maximumNumber" value="0"/>
+			<property name="maximumMessage" value="Null value cannot be directly returned, use local variable instead"/>
+		</module>
+
+		<!--A try statement within a catch or finally block-->
+		<module name="DescendantToken">
+			<property name="tokens" value="LITERAL_CATCH,LITERAL_FINALLY"/>
+			<property name="limitedTokens" value="LITERAL_TRY"/>
+			<property name="maximumNumber" value="0"/>
+			<property name="maximumMessage" value="A try statement within a catch or finally block is not allowed"/>
+		</module>
+
+		<!--A @Transactional annotation is used with a private method-->
+		<module name="Regexp">
+			<property name="format" value="@Transactional\(*.*?\)*(([\s\n]*@\w+\(*.*?\)*)*[\s\n]*)*private"/>
+			<property name="illegalPattern" value="true"/>
+			<property name="ignoreComments" value="true"/>
+			<property name="message" value="A @Transactional annotation should not be used with a private method"/>
+		</module>
 	</module>
 
 </module>
