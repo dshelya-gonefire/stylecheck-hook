@@ -30,3 +30,12 @@ git config --global alias.verify '!sh .git/hooks/pre-commit'
  
 cp hook/* $GIT_HOOKS_DIR
 
+### Create aliased installer script for patched repository
+if [[ "$1" != "." ]]; then
+    ALIAS_NAME=`echo $1 | sed 's/.*\/\([a-zA-Z0-9_.-]\+$\)/\1/gi'`
+	else
+	ALIAS_NAME=`pwd | sed 's/.*\/\([a-zA-Z0-9_.-]\+$\)/\1/gi'`
+fi
+
+echo "./install.sh $1" > install.$ALIAS_NAME.sh
+
