@@ -43,9 +43,6 @@
 		</module>
 
 		<!-- Checks for Size Violations.                    -->
-		<module name="LineLength">
-			<property name="max" value="170"/>
-		</module>
 		<module name="MethodLength"/>
 		<module name="ParameterNumber"/>
 
