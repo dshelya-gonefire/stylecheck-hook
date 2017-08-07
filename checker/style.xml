@@ -175,14 +175,6 @@
 			<property name="maximumMessage" value="A return statement from within a catch or finally block is not allowed"/>
 		</module>
 
-		<!--A return with null statement -->
-		<module name="DescendantToken">
-			<property name="tokens" value="LITERAL_RETURN"/>
-			<property name="limitedTokens" value="LITERAL_NULL"/>
-			<property name="maximumNumber" value="0"/>
-			<property name="maximumMessage" value="Null value cannot be directly returned, use local variable instead"/>
-		</module>
-
 		<!--A try statement within a catch or finally block-->
 		<module name="DescendantToken">
 			<property name="tokens" value="LITERAL_CATCH,LITERAL_FINALLY"/>
@@ -198,6 +190,13 @@
 			<property name="ignoreComments" value="true"/>
 			<property name="message" value="A @Transactional annotation should not be used with a private method"/>
 		</module>
-	</module>
 
+		<!--A return with null statement -->
+		<module name="Regexp">
+			<property name="format" value="return[\s\n]+null[\s\n]+;"/>
+			<property name="illegalPattern" value="true"/>
+			<property name="ignoreComments" value="true"/>
+			<property name="message" value="Null value cannot be directly returned, use local variable instead"/>
+		</module>
+	</module>
 </module>
