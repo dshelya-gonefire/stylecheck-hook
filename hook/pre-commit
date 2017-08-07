@@ -11,10 +11,8 @@ CONFIG_FILE=`git config --get check.style`;
 ### Retrieve list of all changed and staged JAVA files from index ###
 
 ERRORS=$(git diff-index --cached HEAD | grep .java | sed 's/^:.*\t//' | uniq |\
-
 ### Iterate through discovered changes and identify affected lines
-while read CHANGE ; do 
-
+while read CHANGE ; do
   ###Extract affected lines
   AFFECTED_LINES=`git blame $CHANGE | grep "Not Committed Yet" | sed "s/^.* \+\([0-9]\+\)).*$/\1/" | paste -s -d\| -`;
   
@@ -28,11 +26,11 @@ while read CHANGE ; do
 done)
  
 ### Verify that there are no errors discovered otherwise print errors and exit with error code
-if [[ "$ERRORS" == "" || "$ERRORS" == "~" ]]; then
+if [[ "${ERRORS//[\~ \n\r]/}" == "" ]]; then
     echo -e "${GREEN}Style verification check passed succesfully${NO_COLOR}" 
 	exit 0
 else
-    echo -en "${RED}Style verification check failed. Commit aborted${NO_COLOR}"
+    echo -en "${RED}Style verification check failed${NO_COLOR}"
 	echo $ERRORS | tr '~' '\n' | sed "s/^.ERROR. \(.*java\):/\n\1\n/" | GREP_COLOR='1;33' egrep --color '\s\[.*\]|$'
 	exit -1;
 fi  
