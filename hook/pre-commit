@@ -24,9 +24,11 @@ while read CHANGE ; do
   
   echo ~$LINES
 done)
+
+MESSAGE=`echo $ERRORS | sed -e "s/~\|\s//g"`
  
 ### Verify that there are no errors discovered otherwise print errors and exit with error code
-if [[ "${ERRORS//[\~ \n\r]/}" == "" ]]; then
+if [[ -z $MESSAGE ]]; then
     echo -e "${GREEN}Style verification check passed succesfully${NO_COLOR}" 
 	exit 0
 else
