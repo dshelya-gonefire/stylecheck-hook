@@ -59,7 +59,7 @@
 		<module name="EmptyCatchBlock">
 			<property name="exceptionVariableName" value="expected|ignore"/>
 		</module>
-
+		
 		<!-- Checks for common coding problems               -->
 		<module name="StringLiteralEquality"/>
 		<module name="UnnecessaryParentheses"/>
@@ -194,6 +194,14 @@
 			<property name="illegalPattern" value="true"/>
 			<property name="ignoreComments" value="true"/>
 			<property name="message" value="Null value cannot be directly returned, use local variable instead"/>
+		</module>
+		
+		<!--A return with null statement -->
+		<module name="Regexp">
+			<property name="format" value="import +(static)? *org\.junit\.Assert(\..*)?\s*;"/>
+			<property name="illegalPattern" value="true"/>
+			<property name="ignoreComments" value="true"/>
+			<property name="message" value="Usage of org.junit.Assert is discouraged, use org.assertj.core.api.Assertions instead"/>
 		</module>
 	</module>
 </module>
